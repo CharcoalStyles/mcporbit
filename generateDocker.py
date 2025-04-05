@@ -28,6 +28,42 @@ with open('docker-compose.yml', 'w') as f:
           image: {image_line}
           command: ["uvx", "mcpo", " --port 8000", "--", "{command}", "{args_str}"]
         """)
-        # Generate Dockerfile
-        # Use a Python image with uv pre-installed
-        # ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+
+    # write the nginx entry
+    f.write(f"""
+      nginx:
+        image: nginx:latest
+        ports:
+          - "80:80"
+        volumes:
+          - ./nginx.conf:/etc/nginx/nginx.conf
+        """ )
+    #write the dependency entry
+    f.write(f"""
+      depends_on:
+        """)
+    for server in servers:
+        route = server['route']
+        f.write(f"""
+          - {route}""")
+
+# write the nginx config file
+with open('nginx.conf', 'w') as f:
+    f.write(f"""
+    worker_processes 1;
+    events {{
+        worker_connections 1024;
+    }}
+    http {{
+        server {{
+            listen 80;""")
+    for server in servers:
+        route = server['route']
+        f.write(f"""
+            location /{route} {{
+                proxy_pass http://{route}:8000;
+                """)
+    f.write(f"""
+            }}
+        }}
+    }}""")
