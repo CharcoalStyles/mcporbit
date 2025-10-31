@@ -103,7 +103,8 @@ with open('index.html', 'w') as f:
       a { color: #007acc; text-decoration: none; padding-bottom: 0.2em; display: block; }
       a:hover { text-decoration: underline; }
       .server-list { margin-top: 1em; display: flex; flex-direction: row; gap: 1em; flex-wrap: wrap; }
-      .server-entry { border: 1px solid #ddd; border-radius: 4px; padding-bottom: 1em; width: 300px; }
+      .server-entry { border: 1px solid #ddd; border-radius: 4px; padding: 0.5em; width: 300px; }
+      .server-entry h2 { margin-top: -0.25em; color: #848; }
     </style>
   </head>
   <body>
