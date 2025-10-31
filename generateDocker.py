@@ -89,3 +89,33 @@ http {{
     f.write(f"""
   }}
 }}""")
+
+# Generate index.html for nginx main route
+with open('index.html', 'w') as f:
+    f.write("""<!DOCTYPE html>
+<html>
+  <head>
+    <title>Installed Servers Directory</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 2em; }
+      h1 { color: #333; }
+      a { color: #007acc; text-decoration: none; padding-bottom: 0.2em; display: inline-block; }
+      a:hover { text-decoration: underline; }
+      .server-entry { border-bottom: 1px solid #ddd; padding-bottom: 1em; }
+    </style>
+  </head>
+  <body>
+    <h1>Installed Servers Directory</h1>
+""")
+    for server in servers:
+        name = server['name']
+        route = server['route']
+        f.write(f'      <div class="server-entry">\n')
+        f.write(f'        <h2>{name}</h2>\n')
+        f.write(f'        <a href="/{route}">MCP link</a>\n')
+        f.write(f'        <a href="/{route}/docs">OpenAPI Docs</a>\n')
+        f.write(f'      </div>\n')
+    f.write("""
+  </body>
+</html>
+""")
