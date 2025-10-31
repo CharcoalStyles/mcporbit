@@ -8,11 +8,17 @@
       "args": ["-y", "@automatalabs/mcp-server-playwright"]
     },
     {
-      "name": "Sequential Thiking",
+      "name": "Sequential Thinking",
       "route": "sequential-thinking",
-
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    },
+    {
+      "name": "Obsidian",
+      "route": "obsidian",
+      "command": "npx",
+      "mountPoint": "/data",
+      "args": ["-y", "mcp-obsidian", "data"]
     }
   ]
 }

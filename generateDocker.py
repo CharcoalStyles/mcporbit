@@ -28,6 +28,12 @@ services:""")
     image: {image_line}
     command: ["uvx", "mcpo", " --port 8000", "--", "{command}", "{args_str}"]
 """)
+        # check for mountPoint
+        if 'mountPoint' in server:
+            mount_point = server['mountPoint']
+            f.write(f"""    volumes:
+      - ./data/{route}:{mount_point}
+""")
 
     # write the nginx entry
     f.write(f"""

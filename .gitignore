@@ -244,3 +244,4 @@ pip-selfcheck.json
 config.json
 docker-compose.yml
 nginx.conf
+data/
