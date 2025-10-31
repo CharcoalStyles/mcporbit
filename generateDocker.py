@@ -100,14 +100,16 @@ with open('index.html', 'w') as f:
     <style>
       body { font-family: Arial, sans-serif; margin: 2em; }
       h1 { color: #333; }
-      a { color: #007acc; text-decoration: none; padding-bottom: 0.2em; display: inline-block; }
+      a { color: #007acc; text-decoration: none; padding-bottom: 0.2em; display: block; }
       a:hover { text-decoration: underline; }
-      .server-entry { border-bottom: 1px solid #ddd; padding-bottom: 1em; }
+      .server-list { margin-top: 1em; display: flex; flex-direction: row; gap: 1em; flex-wrap: wrap; }
+      .server-entry { border: 1px solid #ddd; border-radius: 4px; padding-bottom: 1em; width: 300px; }
     </style>
   </head>
   <body>
     <h1>Installed Servers Directory</h1>
 """)
+    f.write(f'    <div class="server-list">\n')
     for server in servers:
         name = server['name']
         route = server['route']
@@ -116,6 +118,7 @@ with open('index.html', 'w') as f:
         f.write(f'        <a href="/{route}">MCP link</a>\n')
         f.write(f'        <a href="/{route}/docs">OpenAPI Docs</a>\n')
         f.write(f'      </div>\n')
+    f.write(f'    </div>\n')
     f.write("""
   </body>
 </html>
