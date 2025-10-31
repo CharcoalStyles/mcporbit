@@ -43,6 +43,7 @@ services:""")
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./index.html:/usr/share/nginx/html/index.html
 """ )
     #write the dependency entry
     f.write(f"""
