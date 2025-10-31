@@ -245,3 +245,4 @@ config.json
 docker-compose.yml
 nginx.conf
 data/
+index.html
