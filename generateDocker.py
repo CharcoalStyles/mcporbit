@@ -45,39 +45,41 @@ services:""")
     for server in servers:
         route = server['route']
         f.write(f"""
-      - {route}""")
+      - {route}
+""")
 
 # write the nginx config file
 with open('nginx.conf', 'w') as f:
     f.write(f"""
-    worker_processes 1;
-    events {{
-        worker_connections 1024;
-    }}
-    http {{
-        server {{
-            listen 80;""")
+worker_processes 1;
+events {{
+  worker_connections 1024;
+}}
+http {{
+  server {{
+    listen 80;""")
     for server in servers:
         route = server['route']
         f.write(f"""
-            location /{route} {{
-                proxy_pass http://{route}:8000;
+    location /{route} {{
+      proxy_pass http://{route}:8000;
 
-                rewrite ^/{route}/(.*)$ /$1 break;
+      rewrite ^/{route}/(.*)$ /$1 break;
 
-                proxy_set_header Host $host;
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
 
-                # Required for sub_filter to work
-                proxy_set_header Accept-Encoding "";
+      # Required for sub_filter to work
+      proxy_set_header Accept-Encoding "";
 
-                # Rewrite the Swagger UI config
-                sub_filter_once off;
-                sub_filter 'url: \\'/openapi.json\\'' 'url: \\'/{route}/openapi.json\\'';
-                sub_filter 'url: "/openapi.json"' 'url: "/{route}/openapi.json"';
-            }}""")
+      # Rewrite the Swagger UI config
+      sub_filter_once off;
+      sub_filter 'url: \\'/openapi.json\\'' 'url: \\'/{route}/openapi.json\\'';
+      sub_filter 'url: "/openapi.json"' 'url: "/{route}/openapi.json"';
+    }}
+""")
     f.write(f"""
-        }}
-    }}""")
+  }}
+}}""")
