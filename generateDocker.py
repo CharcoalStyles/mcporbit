@@ -22,7 +22,7 @@ services:""")
         print(f"Generating compose entry for server: {server['name']}")
         args_str= "\", \"".join(args)
         print(f"args_str: {args_str}")
-        image_line = "mcporbit/node-runner:latest" if command == "npx" else "ghcr.io/astral-sh/uv:python3.12-bookworm-slim"
+        image_line = "mcporbit/node-runner:latest"
         f.write(f"""
   {route}:
     image: {image_line}
