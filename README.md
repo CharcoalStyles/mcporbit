@@ -36,6 +36,7 @@ Each server has the following keys:
 - `route`: The route of the server. This is currently only used to generate the container name.
 - `command`: The base command to run the server. Currently supporting `uvx` and `npx` to run publicly accessible libraries.
 - `args`: The arguments to pass to the command.
+- `mountPoint` (optional): The mount point inside the container to mount a volume. If specified, a volume will be created at `./data/{route}` on the host and mounted to the specified mount point inside the container.
 
 ## Build
 
