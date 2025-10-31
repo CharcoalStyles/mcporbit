@@ -11,7 +11,7 @@ servers = config['servers']
 # open a file to write the docker-compose file
 with open('docker-compose.yml', 'w') as f:
     f.write(f"""
-      services:""")
+services:""")
     # Loop over all servers
     for server in servers:
         name = server['name']
@@ -22,30 +22,30 @@ with open('docker-compose.yml', 'w') as f:
         print(f"Generating compose entry for server: {server['name']}")
         args_str= "\", \"".join(args)
         print(f"args_str: {args_str}")
-        image_line = "mcporbit/node_runner" if command == "npx" else "ghcr.io/astral-sh/uv:python3.12-bookworm-slim"
+        image_line = "mcporbit/node-runner:latest" if command == "npx" else "ghcr.io/astral-sh/uv:python3.12-bookworm-slim"
         f.write(f"""
-        {route}:
-          image: {image_line}
-          command: ["uvx", "mcpo", " --port 8000", "--", "{command}", "{args_str}"]
-        """)
+  {route}:
+    image: {image_line}
+    command: ["uvx", "mcpo", " --port 8000", "--", "{command}", "{args_str}"]
+""")
 
     # write the nginx entry
     f.write(f"""
-      nginx:
-        image: nginx:latest
-        ports:
-          - "80:80"
-        volumes:
-          - ./nginx.conf:/etc/nginx/nginx.conf
-        """ )
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+""" )
     #write the dependency entry
     f.write(f"""
-      depends_on:
+    depends_on:
         """)
     for server in servers:
         route = server['route']
         f.write(f"""
-          - {route}""")
+      - {route}""")
 
 # write the nginx config file
 with open('nginx.conf', 'w') as f:
@@ -62,8 +62,22 @@ with open('nginx.conf', 'w') as f:
         f.write(f"""
             location /{route} {{
                 proxy_pass http://{route}:8000;
-                """)
+
+                rewrite ^/{route}/(.*)$ /$1 break;
+
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+
+                # Required for sub_filter to work
+                proxy_set_header Accept-Encoding "";
+
+                # Rewrite the Swagger UI config
+                sub_filter_once off;
+                sub_filter 'url: \\'/openapi.json\\'' 'url: \\'/{route}/openapi.json\\'';
+                sub_filter 'url: "/openapi.json"' 'url: "/{route}/openapi.json"';
+            }}""")
     f.write(f"""
-            }}
         }}
     }}""")
