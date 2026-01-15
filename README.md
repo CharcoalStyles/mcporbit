@@ -37,6 +37,7 @@ Each server has the following keys:
 - `command`: The base command to run the server. Currently supporting `uvx` and `npx` to run publicly accessible libraries.
 - `args`: The arguments to pass to the command.
 - `mountPoint` (optional): The mount point inside the container to mount a volume. If specified, a volume will be created at `./data/{route}` on the host and mounted to the specified mount point inside the container.
+- `env` (optional): A dictionary of environment variables to set inside the container.
 
 ## Build
 

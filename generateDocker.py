@@ -34,7 +34,16 @@ services:""")
             f.write(f"""    volumes:
       - ./data/{route}:{mount_point}
 """)
-
+            
+        # check for env variables
+        if 'env' in server:
+            env_vars = server['env']
+            f.write(f"""    environment:""")
+            for key, value in env_vars.items():
+                f.write(f"""
+      {key}: {value}
+""")
+                
     # write the nginx entry
     f.write(f"""
   nginx:
@@ -43,17 +52,14 @@ services:""")
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./index.html:/etc/nginx/html/index.html
-""" )
+      - ./index.html:/etc/nginx/html/index.html""" )
     #write the dependency entry
     f.write(f"""
-    depends_on:
-        """)
+    depends_on:""")
     for server in servers:
         route = server['route']
         f.write(f"""
-      - {route}
-""")
+      - {route}""")
 
 # write the nginx config file
 with open('nginx.conf', 'w') as f:
