@@ -28,7 +28,8 @@ build.bat
 Copy the `config.sample.json` file, then edit it to your needs.
 
 The root of the config file has two keys:
-- `name`: The name of the server. This is currently not used
+- `name`: The name of the server. This is currently used in the nginx index page.
+- `port`: The port to expose the nginx server on, default is `80`
 - `servers`: A list of servers to expose.
 
 Each server has the following keys:

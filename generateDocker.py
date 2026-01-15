@@ -52,12 +52,14 @@ services:""")
         {key}: {value}
 """)
                 
+    port = config.get('port', 80)
+                
     # write the nginx entry
     f.write(f"""
     nginx:
       image: nginx:latest
       ports:
-        - "80:80"
+        - "{port}:80"
       volumes:
         - ./nginx.conf:/etc/nginx/nginx.conf
         - ./index.html:/etc/nginx/html/index.html""" )
