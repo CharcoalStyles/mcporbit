@@ -1,5 +1,4 @@
 import json
-import subprocess
 
 with open('config.json', 'r') as config_file:
     config = json.load(config_file)
@@ -23,11 +22,20 @@ services:""")
         args_str= "\", \"".join(args)
         print(f"args_str: {args_str}")
         image_line = "mcporbit/node-runner:latest"
-        f.write(f"""
-  {route}:
-    image: {image_line}
-    command: ["uvx", "mcpo", " --port 8000", "--", "{command}", "{args_str}"]
-""")
+
+        if (command == "npx" or command == "uvx"):
+          f.write(f"""
+    {route}:
+      image: {image_line}
+      command: ["uvx", "mcpo", " --port 8000", "--", "{command}", "{args_str}"]
+  """)
+        else:
+          f.write(f"""
+    {route}:
+      image: {image_line}
+      command: ["uvx", "mcpo", " --port 8000", "{command}", "--", "{args_str}"]
+  """)
+
         # check for mountPoint
         if 'mountPoint' in server:
             mount_point = server['mountPoint']

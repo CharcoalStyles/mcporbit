@@ -34,7 +34,7 @@ The root of the config file has two keys:
 Each server has the following keys:
 - `name`: The name of the server. This is currently only used in logging
 - `route`: The route of the server. This is currently only used to generate the container name.
-- `command`: The base command to run the server. Currently supporting `uvx` and `npx` to run publicly accessible libraries.
+- `command`: The base command to run the server. Currently supporting `uvx` and `npx` to run publicly accessible self hosted MCP servers. Currently testing the ability to use SSE and streaming HTTP responses, with the `sse` and `streamable-http` options.
 - `args`: The arguments to pass to the command.
 - `mountPoint` (optional): The mount point inside the container to mount a volume. If specified, a volume will be created at `./data/{route}` on the host and mounted to the specified mount point inside the container.
 - `env` (optional): A dictionary of environment variables to set inside the container.
